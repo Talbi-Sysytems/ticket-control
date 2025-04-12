@@ -114,29 +114,14 @@
     const resultMessage = document.getElementById('resultMessage');
 
     // Set volume levels (0.0 to 1.0)
-    scanSound.volume = 1.0;
-    peep.volume = 0.7;
+    scanSound.volume = 0.5;
+    peep.volume = 0.5;
     peeppeep.volume = 0.5;
-
-    function enterFullScreen() {
-      if (document.documentElement.requestFullscreen) {
-        document.documentElement.requestFullscreen();
-      } else if (document.documentElement.mozRequestFullScreen) { // Firefox
-        document.documentElement.mozRequestFullScreen();
-      } else if (document.documentElement.webkitRequestFullscreen) { // Chrome, Safari, Opera
-        document.documentElement.webkitRequestFullscreen();
-      } else if (document.documentElement.msRequestFullscreen) { // IE/Edge
-        document.documentElement.msRequestFullscreen();
-      }
-    }
 
     scanBtn.addEventListener('click', () => {
       scanSound.currentTime = 0;
       scanSound.play();
       scanBtn.disabled = true;
-
-      // Automatically enter full-screen mode
-      enterFullScreen();
 
       scanSound.onended = () => {
         okBtn.style.display = 'inline-block';
