@@ -3,50 +3,82 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Ticket Scanner Training</title>
+  <title>TMS Ticket Control</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       background-color: #f2f2f2;
       text-align: center;
-      padding: 50px;
+      padding: 40px 20px;
     }
 
     img.logo {
-      width: 150px;
+      width: 120px;
       margin-bottom: 20px;
     }
 
     h1 {
       color: #333;
+      font-size: 24px;
     }
 
     .card-area {
-      margin: 30px auto;
-      padding: 30px;
+      margin: 0 auto;
+      padding: 25px;
       background-color: #fff;
       border-radius: 15px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      width: 300px;
+      max-width: 90%;
+      width: 320px;
     }
 
     button {
       margin: 10px;
-      padding: 15px 25px;
+      padding: 14px 22px;
       font-size: 16px;
       border: none;
       border-radius: 8px;
       cursor: pointer;
+      width: 100%;
+      max-width: 250px;
+    }
+
+    #scanBtn {
+      background-color: #2196F3;
+      color: white;
     }
 
     #okBtn {
       background-color: #4CAF50;
       color: white;
+      display: none;
     }
 
     #notOkBtn {
       background-color: #f44336;
       color: white;
+      display: none;
+    }
+
+    #resultMessage {
+      font-size: 20px;
+      margin-top: 20px;
+      font-weight: bold;
+      display: none;
+    }
+
+    .valid {
+      color: green;
+    }
+
+    .invalid {
+      color: red;
+    }
+
+    @media (min-width: 600px) {
+      button {
+        width: auto;
+      }
     }
   </style>
 </head>
@@ -58,29 +90,76 @@
   <h1>Ticket Control</h1>
 
   <div class="card-area">
-    <p>Click the appropriate button:</p>
+    <p>Press scan to start:</p>
+    <button id="scanBtn">Start Scan</button><br>
     <button id="okBtn">Valid</button>
     <button id="notOkBtn">Unvalid</button>
+    <p id="resultMessage"></p>
   </div>
 
-  <!-- Local MP3 sounds -->
+  <!-- Sound Effects -->
+  <audio id="scanSound" src="scan.mp3" preload="auto"></audio>
   <audio id="peep" src="sound1.mp3" preload="auto"></audio>
   <audio id="peeppeep" src="sound2.mp3" preload="auto"></audio>
 
   <script>
+    const scanBtn = document.getElementById('scanBtn');
     const okBtn = document.getElementById('okBtn');
     const notOkBtn = document.getElementById('notOkBtn');
+
+    const scanSound = document.getElementById('scanSound');
     const peep = document.getElementById('peep');
     const peeppeep = document.getElementById('peeppeep');
+
+    const resultMessage = document.getElementById('resultMessage');
+
+    // Set volume levels (0.0 to 1.0)
+    scanSound.volume = 1.0;
+    peep.volume = 0.7;
+    peeppeep.volume = 0.5;
+
+    scanBtn.addEventListener('click', () => {
+      scanSound.currentTime = 0;
+      scanSound.play();
+      scanBtn.disabled = true;
+
+      scanSound.onended = () => {
+        okBtn.style.display = 'inline-block';
+        notOkBtn.style.display = 'inline-block';
+        scanBtn.style.display = 'none';
+      };
+    });
 
     okBtn.addEventListener('click', () => {
       peep.currentTime = 0;
       peep.play();
+
+      resultMessage.textContent = "This Ticket is Valid";
+      resultMessage.className = "valid";
+      resultMessage.style.display = "block";
+
+      okBtn.style.display = "none";
+      notOkBtn.style.display = "none";
+
+      setTimeout(() => {
+        location.reload();
+      }, 3000);
     });
 
     notOkBtn.addEventListener('click', () => {
       peeppeep.currentTime = 0;
       peeppeep.play();
+
+      resultMessage.textContent = "This Ticket is Unvalid";
+      resultMessage.className = "invalid";
+      resultMessage.style.display = "block";
+
+      okBtn.style.display = "none";
+      notOkBtn.style.display = "none";
+
+      setTimeout(() => {
+        location.reload();
+      }, 3000);
     });
   </script>
 </body>
